@@ -32,9 +32,15 @@ st.markdown("""
         color: #ffffff !important;
     }
     
-    /* 사이드바 글자 색상 */
+    /* 사이드바 너비 및 글자 색상 */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #1a1a3e 0%, #0d1b2a 100%);
+        min-width: 400px !important;
+        width: 400px !important;
+    }
+    
+    section[data-testid="stSidebar"] > div {
+        width: 400px !important;
     }
     
     section[data-testid="stSidebar"] p,
