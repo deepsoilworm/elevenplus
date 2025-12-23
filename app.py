@@ -35,12 +35,82 @@ st.markdown("""
     /* 사이드바 너비 및 글자 색상 */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #1a1a3e 0%, #0d1b2a 100%);
-        min-width: 400px !important;
-        width: 400px !important;
     }
     
-    section[data-testid="stSidebar"] > div {
-        width: 400px !important;
+    section[data-testid="stSidebar"] > div:first-child {
+        width: 100% !important;
+    }
+    
+    [data-testid="stSidebarContent"] {
+        width: 100% !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* 사이드바 안에서 접기 버튼 (열려있을 때 - 흰색, 항상 보이게) */
+    [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] button {
+        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        opacity: 1 !important;
+    }
+    
+    [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
+        color: #ffffff !important;
+        fill: #ffffff !important;
+    }
+    
+    /* 대시보드 상단 열기 버튼 (접혀있을 때 - 흰색 배경 + 검은색, 항상 보이게) */
+    [data-testid="collapsedControl"] {
+        color: #000000 !important;
+        background: #ffffff !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    [data-testid="collapsedControl"] svg {
+        color: #000000 !important;
+        fill: #000000 !important;
+        stroke: #000000 !important;
+    }
+    
+    [data-testid="collapsedControl"] svg path {
+        fill: #000000 !important;
+        stroke: #000000 !important;
+    }
+    
+    [data-testid="collapsedControl"] button {
+        color: #000000 !important;
+    }
+    
+    [data-testid="collapsedControl"] * {
+        color: #000000 !important;
+        fill: #000000 !important;
+    }
+    
+    /* Expander 화살표 더 진하게 */
+    .streamlit-expanderHeader svg {
+        fill: #00d4aa !important;
+        stroke: #00d4aa !important;
+    }
+    
+    [data-testid="stExpander"] summary svg {
+        color: #00d4aa !important;
+        fill: #00d4aa !important;
+    }
+    
+    [data-testid="stExpander"] summary {
+        color: #ffffff !important;
+    }
+    
+    [data-testid="stExpander"] summary span {
+        color: #ffffff !important;
+        font-weight: 500;
     }
     
     section[data-testid="stSidebar"] p,
@@ -329,6 +399,14 @@ with st.sidebar:
                 for key in keys_to_delete:
                     del st.session_state.endo_factors[node_name][key]
                     st.rerun()
+                
+                # 가중치 합계 체크 및 표시
+                if endo_total_weight > 1.0:
+                    st.error(f"⚠️ 가중치 합계: **{endo_total_weight:.0%}** (100% 초과! 자동 정규화됨)")
+                elif endo_total_weight < 1.0:
+                    st.warning(f"📊 가중치 합계: **{endo_total_weight:.0%}** (100% 미만)")
+                else:
+                    st.success(f"✅ 가중치 합계: **{endo_total_weight:.0%}**")
                 
                 endo_score = endo_weighted_sum / max(endo_total_weight, 0.01)
                 st.info(f"내재 점수: **{endo_score:.0%}**")
